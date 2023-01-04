@@ -21,7 +21,35 @@ public class Project {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "intro")
+    private String intro;
+
+    @Column(name = "start_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime start_at;
+
+    @Column(name = "end_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime end_at;
+
+    @Column(name = "user_id")
+    private long user_id;
+
+    @Column(name = "status")
+    private long status;
+
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime created_at;
+
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime updated_at;
+
+    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime deleted_at;
 
     public long getId() {
         return id;
@@ -102,32 +130,5 @@ public class Project {
     public void setDeleted_at(LocalDateTime deleted_at) {
         this.deleted_at = deleted_at;
     }
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "intro")
-    private String intro;
-
-    @Column(name = "start_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime start_at;
-
-    @Column(name = "end_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime end_at;
-
-    @Column(name = "user_id")
-    private long user_id;
-
-    @Column(name = "status")
-    private long status;
-
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime created_at;
-
-    @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime updated_at;
-
-    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deleted_at;
 
 }

@@ -1,0 +1,123 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <title>CNS|Project Management</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header::header"></div>
+
+<div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message" role="alert">
+[[${message}]]
+    <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="my-3">
+    <form th:action="@{/projects}">
+        <div class="row d-flex">
+            <div class="col-md-6 mt-2">
+                <div class="search">
+                    <i class="fa fa-search"></i>
+                    <input id="keyword" type="search" name="keyword" th:value="${keyword}" required class="form-control"
+                           placeholder="Enter keyword">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <button id="btnClear" class="btn btn-info">Clear</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:if="${projects.size() > 0}">
+    <table class="table table-hover table-responsive-xl">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Intro</th>
+                <th>Start At</th>
+                <th>End At</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="project : ${projects}">
+                <th scope="row">[[${project.id}]]</th>
+                <td>[[${projct.name}]]</td>
+                <td>[[${projct.name}]]</td>
+                <td>[[${projct.intro}]]</td>
+                <td>[[${projct.start_at}]]</td>
+                <td>[[${projct.end_at}]]</td>
+                <td>[[${projct.status}]]</td>
+                <td>
+                    <a th:href="@{'/project/'+${project.id}}">
+                        <i class="fa fa-edit"></i>
+                    </a>|
+                    <a th:href="@{'/project/delete/'+${project.id}}">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="" th:unless="${projects.size() > 0}">
+    <span>No projects found!</span>
+</div>
+
+<div class="modal fade text-center" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <span id="confirmText"></span>
+            </div>
+
+            <div class="modal-footer">
+                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnClear").on("click", function (e) {
+            e.preventDefault();
+            $("#keyword").text("");
+            window.location = "[[@{/projects}]]";
+        });
+
+        $(".btn-delete").on("click", function (e) {
+            e.preventDefault();
+            link = $(this);
+
+            projectTitle = link.attr("projectTitle");
+            $("#yesBtn").attr("href", link.attr("href"));
+            $("#confirmText").html("Do you want to delete the Project \<strong\>" + tutorialTitle + "\<\/strong\>?");
+            $("#confirmModal").modal();
+        });
+    });
+</script>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>
