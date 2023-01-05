@@ -2,6 +2,7 @@ package com.example.crud.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "projects")
@@ -10,7 +11,7 @@ public class Project {
 
     }
 
-    public Project(String name, String intro, LocalDateTime start_at, LocalDateTime end_at, long user_id, long status, LocalDateTime created_at) {
+    public Project(String name, String intro, String start_at, String end_at, Long user_id, Long status, LocalDateTime created_at) {
         this.name = name;
         this.intro = intro;
         this.start_at = start_at;
@@ -22,7 +23,7 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -30,17 +31,17 @@ public class Project {
     @Column(name = "intro")
     private String intro;
 
-    @Column(name = "start_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime start_at;
+    @Column(name = "start_at", columnDefinition = "DATE")
+    private String start_at;
 
-    @Column(name = "end_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime end_at;
+    @Column(name = "end_at", columnDefinition = "DATE")
+    private String end_at;
 
     @Column(name = "user_id")
-    private long user_id;
+    private Long user_id;
 
     @Column(name = "status")
-    private long status;
+    private Long status;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime created_at;
@@ -51,11 +52,11 @@ public class Project {
     @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime deleted_at;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,35 +76,35 @@ public class Project {
         this.intro = intro;
     }
 
-    public LocalDateTime getStart_at() {
+    public String getStart_at() {
         return start_at;
     }
 
-    public void setStart_at(LocalDateTime start_at) {
+    public void setStart_at(String start_at) {
         this.start_at = start_at;
     }
 
-    public LocalDateTime getEnd_at() {
+    public String getEnd_at() {
         return end_at;
     }
 
-    public void setEnd_at(LocalDateTime end_at) {
+    public void setEnd_at(String end_at) {
         this.end_at = end_at;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
-    public long getStatus() {
+    public Long getStatus() {
         return status;
     }
 
-    public void setStatus(long status) {
+    public void setStatus(Long status) {
         this.status = status;
     }
 

@@ -2,18 +2,18 @@ package com.example.crud.controller;
 
 import com.example.crud.model.Project;
 import com.example.crud.repository.ProjectRepository;
-import com.example.crud.repository.TutorialRepository;
+import org.apache.tomcat.util.net.IPv6Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.*;
 
 @Controller
 /*@RestController*/
@@ -42,44 +42,50 @@ public class ProjectController {
     }
     @GetMapping("/project/new")
     public String addProject(Model model){
-        try{
-            return "Hello world";
-        }catch (Exception e){
-            return e.getMessage();
-        }
-
-        /*Project project = new Project();
+        Project project = new Project();
         model.addAttribute("project",project);
         model.addAttribute("pageTitle","Create new Project.");
 
-        return "project_form";*/
+        return "project_form";
     }
     @PostMapping("/project/save")
-    public String saveProject(Project project, RedirectAttributes redirectAttributes){
+    public String saveProject(@ModelAttribute("Project") Project project, Model model, RedirectAttributes redirectAttributes){
         try{
+            Project _project = new Project();
+            String message = "The Project has been saved successfully";
+            if (project.getId() != null) {
+                _project = projectRepository.findById(project.getId()).get();
+                message = "The Project has been updated successfully";
+                model.addAttribute("project",_project);
+            }
+            _project.setName(project.getName());
+            _project.setIntro(project.getIntro());
+            _project.setStart_at(project.getStart_at());
+            _project.setEnd_at(project.getEnd_at());
+            _project.setUser_id(project.getUser_id());
+
+            projectRepository.save(_project);
+
+            redirectAttributes.addFlashAttribute("message",message);
+        }catch (Exception e){
+            redirectAttributes.addAttribute("message","Something error.");
+        }
+        return "redirect:/projects";
+       /* try{
+            Project _project = new Project();
+            _project.setName(project.getName());
+            _project.setIntro(project.getIntro());
+            _project.setStart_at(project.getStart_at());
+            _project.setEnd_at(project.getEnd_at());
+            _project.setUser_id(project.getUser_id());
+
             projectRepository.save(project);
 
             redirectAttributes.addFlashAttribute("message","The Project has been saved successfully");
         }catch (Exception e){
-            redirectAttributes.addAttribute("message",e.getMessage());
+            redirectAttributes.addAttribute("message","Something error.");
         }
-        return "redirect:/projects";
-        /*try{
-            Project data = projectRepository
-                    .save(
-                            new Project(
-                                    project.getName(),
-                                    project.getIntro(),
-                                    project.getStart_at(),
-                                    project.getEnd_at(),
-                                    project.getUser_id(),
-                                    project.getStatus(),
-                                    project.getCreated_at()
-                            ));
-            return new ResponseEntity<>(data, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/
+        return "redirect:/projects";*/
     }
 
     @GetMapping("/project/{id}")
@@ -96,8 +102,33 @@ public class ProjectController {
         }
     }
 
+    @PostMapping("/project/update")
+    public String updateProject(@ModelAttribute("Project") Project project,Model model, RedirectAttributes redirectAttributes){
+        try{
+            Project _project = new Project();
+            String message = "The Project has been saved successfully";
+            if (project.getId() != null) {
+                _project = projectRepository.findById(project.getId()).get();
+                message = "The Project has been updated successfully";
+                model.addAttribute("project",_project);
+            }
+            _project.setName(project.getName());
+            _project.setIntro(project.getIntro());
+            _project.setStart_at(project.getStart_at());
+            _project.setEnd_at(project.getEnd_at());
+            _project.setUser_id(project.getUser_id());
+
+            projectRepository.save(_project);
+
+            redirectAttributes.addFlashAttribute("message",message);
+        }catch (Exception e){
+            redirectAttributes.addAttribute("message","Something error.");
+        }
+        return "project_form";
+    }
+
     @GetMapping("/project/delete/{id}")
-    public String deleteProject(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteProject(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try{
             projectRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("message", "The Project is removed successfully.");
@@ -105,7 +136,7 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("message",e.getMessage());
         }
 
-        return "redirect:/tutorials";
+        return "redirect:/projects";
     }
 
     @GetMapping("/projects/{id}/published/{status}")

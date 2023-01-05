@@ -4,6 +4,7 @@ import com.example.crud.model.Tutorial;
 import com.example.crud.repository.TutorialRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,6 @@ public class TutorialController {
     @GetMapping("/tutorials/{id}")
     public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id){
         Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
-
         if (tutorialData.isPresent()){
             return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
         }else{

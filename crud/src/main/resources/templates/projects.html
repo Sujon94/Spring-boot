@@ -40,7 +40,7 @@
     </form>
 </div>
 <div th:if="${projects.size() > 0}">
-    <table class="table table-hover table-responsive-xl">
+    <table class="table table-sm table-hover table-responsive-xl">
         <thead class="thead-dark">
             <tr>
                 <th>Id</th>
@@ -49,18 +49,19 @@
                 <th>Start At</th>
                 <th>End At</th>
                 <th>Status</th>
+                <th>User Id</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="project : ${projects}">
                 <th scope="row">[[${project.id}]]</th>
-                <td>[[${projct.name}]]</td>
-                <td>[[${projct.name}]]</td>
-                <td>[[${projct.intro}]]</td>
-                <td>[[${projct.start_at}]]</td>
-                <td>[[${projct.end_at}]]</td>
-                <td>[[${projct.status}]]</td>
+                <td>[[${project.name}]]</td>
+                <td>[[${project.intro}]]</td>
+                <td>[[${project.start_at}]]</td>
+                <td>[[${project.end_at}]]</td>
+                <td>[[${project.user_id}]]</td>
+                <td>[[${project.status}]]</td>
                 <td>
                     <a th:href="@{'/project/'+${project.id}}">
                         <i class="fa fa-edit"></i>
