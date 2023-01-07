@@ -1,6 +1,8 @@
 package com.example.crud.controller;
 
+import com.example.crud.model.LStatus;
 import com.example.crud.model.Project;
+import com.example.crud.repository.LStatusRepository;
 import com.example.crud.repository.ProjectRepository;
 import org.apache.tomcat.util.net.IPv6Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.util.*;
 public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
+    LStatusRepository lStatusRepository;
 
     @GetMapping("/projects")
     public String getAll(Model model, @Param("keyword") String keyword){
@@ -43,8 +46,11 @@ public class ProjectController {
     @GetMapping("/project/new")
     public String addProject(Model model){
         Project project = new Project();
-        model.addAttribute("project",project);
+        //List<LStatus> lStatuses = new ArrayList<>(lStatusRepository.findAll());
+
         model.addAttribute("pageTitle","Create new Project.");
+        //model.addAttribute("lstatuses",lStatuses);
+        model.addAttribute("project",project);
 
         return "project_form";
     }

@@ -1,11 +1,16 @@
 package com.example.crud.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "project_members")
 public class ProjectMember {
-    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -14,7 +19,7 @@ public class ProjectMember {
         this.id = id;
     }
 
-    @Id
+
     public Long getId() {
         return id;
     }
@@ -32,6 +37,31 @@ public class ProjectMember {
 
     @Column(name = "user_id")
     private Long user_id;
+
+    //@ManyToOne(targetEntity = User.class,cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",insertable=false, updatable=false)
+    @Access(AccessType.FIELD)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+/*@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }*/
 
     public Long getUser_id() {
         return user_id;
@@ -51,4 +81,20 @@ public class ProjectMember {
 
     }
 
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private User user;*/
+
+   /* @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;*/
+
+   /* public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }*/
 }

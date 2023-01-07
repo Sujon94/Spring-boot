@@ -1,15 +1,14 @@
 package com.example.crud.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
     private long id;
 
     public User(){
@@ -22,7 +21,8 @@ public class User {
         this.password = password;
         this.created_at = created_at;
     }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -79,7 +79,7 @@ public class User {
         this.deleted_at = deleted_at;
     }
 
-    @Column(name = "name")
+    @Column(name = "[name]")
     private String name;
 
     @Column(name = "email")
@@ -97,5 +97,17 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
+    @OneToMany(mappedBy = "user")
+    private List<ProjectMember> projectMember;
 
+/*@OneToMany(targetEntity = ProjectMember.class, mappedBy = "user_id",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProjectMember> projectMember;
+
+    public List<ProjectMember> getProjectMember() {
+        return projectMember;
+    }
+
+    public void setProjectMember(List<ProjectMember> projectMember) {
+        this.projectMember = projectMember;
+    }*/
 }

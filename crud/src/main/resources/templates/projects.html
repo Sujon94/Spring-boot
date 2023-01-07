@@ -40,7 +40,7 @@
     </form>
 </div>
 <div th:if="${projects.size() > 0}">
-    <table class="table table-sm table-hover table-responsive-xl">
+    <table class="table table-sm table-hover table-responsive">
         <thead class="thead-dark">
             <tr>
                 <th>Id</th>
@@ -66,9 +66,8 @@
                     <a th:href="@{'/project/'+${project.id}}">
                         <i class="fa fa-edit"></i>
                     </a>|
-                    <a th:href="@{'/project/delete/'+${project.id}}">
-                        <i class="fa fa-trash"></i>
-                    </a>
+                    <a th:href="@{'/project_members/'+${project.id}}"><i class="fa fa-users"></i></a>|
+                    <span th:attr="data-projectid=${member.project_id}" class="btn btn-sm btn-warning remove_project"><i class="fa fa-x"></i></span>
                 </td>
             </tr>
         </tbody>
@@ -79,27 +78,6 @@
     <span>No projects found!</span>
 </div>
 
-<div class="modal fade text-center" id="confirmModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <span id="confirmText"></span>
-            </div>
-
-            <div class="modal-footer">
-                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#btnClear").on("click", function (e) {
@@ -108,14 +86,25 @@
             window.location = "[[@{/projects}]]";
         });
 
-        $(".btn-delete").on("click", function (e) {
-            e.preventDefault();
-            link = $(this);
+        $(".remove_project").on("click",function(){
+            let projectId = $(this).data("projectid");
 
-            projectTitle = link.attr("projectTitle");
-            $("#yesBtn").attr("href", link.attr("href"));
-            $("#confirmText").html("Do you want to delete the Project \<strong\>" + tutorialTitle + "\<\/strong\>?");
-            $("#confirmModal").modal();
+            swal.fire({
+                toast:true,
+                title: "Do you want to delete the Project \<strong\>" + tutorialTitle + "\<\/strong\>?",
+                type: 'info',
+                showCancelButton: !0,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ok",
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
+                buttonsStyling: !1
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href="/project/delete/"+projectId;
+                }
+            });
         });
     });
 </script>

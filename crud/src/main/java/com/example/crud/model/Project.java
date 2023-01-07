@@ -1,8 +1,12 @@
 package com.example.crud.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -132,4 +136,20 @@ public class Project {
         this.deleted_at = deleted_at;
     }
 
+    /*@OneToOne
+    @JoinColumn(name = "user_id")
+    @Fetch(FetchMode.JOIN)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+*/
+   /* @OneToMany
+    @JoinColumn(name = "project_id")
+    private List<ProjectMember> projectMember;*/
 }
