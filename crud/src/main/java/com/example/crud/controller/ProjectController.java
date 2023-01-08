@@ -4,17 +4,14 @@ import com.example.crud.model.LStatus;
 import com.example.crud.model.Project;
 import com.example.crud.repository.LStatusRepository;
 import com.example.crud.repository.ProjectRepository;
-import org.apache.tomcat.util.net.IPv6Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.*;
 
 @Controller
@@ -23,6 +20,7 @@ import java.util.*;
 public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
+    @Autowired
     LStatusRepository lStatusRepository;
 
     @GetMapping("/projects")
@@ -46,10 +44,14 @@ public class ProjectController {
     @GetMapping("/project/new")
     public String addProject(Model model){
         Project project = new Project();
-        //List<LStatus> lStatuses = new ArrayList<>(lStatusRepository.findAll());
+        ArrayList<Long> allowedStatus = new ArrayList<>();
+        allowedStatus.add(1L);
+        allowedStatus.add(2L);
+        List<LStatus> lStatuses = lStatusRepository.findAllByIdIn(allowedStatus);
 
         model.addAttribute("pageTitle","Create new Project.");
-        //model.addAttribute("lstatuses",lStatuses);
+        model.addAttribute("submitBtnName","Save");
+        model.addAttribute("lStatuses",lStatuses);
         model.addAttribute("project",project);
 
         return "project_form";
@@ -64,11 +66,13 @@ public class ProjectController {
                 message = "The Project has been updated successfully";
                 model.addAttribute("project",_project);
             }
+
             _project.setName(project.getName());
             _project.setIntro(project.getIntro());
             _project.setStart_at(project.getStart_at());
             _project.setEnd_at(project.getEnd_at());
             _project.setUser_id(project.getUser_id());
+            _project.setStatus_id(project.getStatus_id());
 
             projectRepository.save(_project);
 
@@ -77,30 +81,19 @@ public class ProjectController {
             redirectAttributes.addAttribute("message","Something error.");
         }
         return "redirect:/projects";
-       /* try{
-            Project _project = new Project();
-            _project.setName(project.getName());
-            _project.setIntro(project.getIntro());
-            _project.setStart_at(project.getStart_at());
-            _project.setEnd_at(project.getEnd_at());
-            _project.setUser_id(project.getUser_id());
-
-            projectRepository.save(project);
-
-            redirectAttributes.addFlashAttribute("message","The Project has been saved successfully");
-        }catch (Exception e){
-            redirectAttributes.addAttribute("message","Something error.");
-        }
-        return "redirect:/projects";*/
     }
 
     @GetMapping("/project/{id}")
     public String editProject(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Project project = projectRepository.findById(id).get();
+            List<LStatus> lStatuses = lStatusRepository.findAll();
 
-            model.addAttribute("project",project);
             model.addAttribute("pageTitle","Edit Project : "+project.getName());
+            model.addAttribute("project",project);
+            model.addAttribute("lStatuses",lStatuses);
+            model.addAttribute("submitBtnName","Update");
+
             return "project_form";
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("message",e.getMessage());

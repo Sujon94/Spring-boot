@@ -3,111 +3,161 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
     <title>CNS|Project Management</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
           integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sweetalert2.min.css}"/>
+
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sweetalert2.min.js}"></script>
+
 </head>
 <body>
-<div th:replace="fragments/header::header"></div>
+<div class="container">
+    <div th:replace="fragments/header::header"></div>
 
-<div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message" role="alert">
-[[${message}]]
-    <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-    </button>
-</div>
-<div class="my-3">
-    <form th:action="@{/projects}">
-        <div class="row d-flex">
-            <div class="col-md-6 mt-2">
-                <div class="search">
-                    <i class="fa fa-search"></i>
-                    <input id="keyword" type="search" name="keyword" th:value="${keyword}" required class="form-control"
-                           placeholder="Enter keyword">
-                    <button type="submit" class="btn btn-secondary">Search</button>
+    <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="my-3">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-header">Search Projects</div>
+                    <div class="card-body">
+                        <form th:action="@{/projects}">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Search Here</span>
+                                </div>
+                                <input id="keyword" type="search" name="keyword" th:value="${keyword}" required
+                                       class="form-control"
+                                       placeholder="Enter keyword">
+                                <div class="input-group-append">
+                                    <div class="search">
+                                        <button type="submit" class="btn btn-outline-info">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6 mt-2">
-                <button id="btnClear" class="btn btn-info">Clear</button>
+        </div>
+    </div>
+    <div class="my-3">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-header">Projects List</div>
+                    <div class="card-body">
+                        <div th:if="${projects.size() > 0}">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Intro</th>
+                                        <th>Start At</th>
+                                        <th>End At</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="project : ${projects}">
+                                        <th scope="row">[[${project.id}]]</th>
+                                        <td>[[${project.name}]]</td>
+                                        <td>[[${project.intro}]]</td>
+                                        <td>[[${project.start_at}]]</td>
+                                        <td>[[${project.end_at}]]</td>
+                                        <td>
+                                            <span th:if="${project.lStatus.name == T(com.example.crud.LStatus).PRE}">
+                                                <span class="badge badge-pill badge-primary">[[${project.lStatus.name}]]</span>
+                                            </span>
+                                            <span th:if="${project.lStatus.name == T(com.example.crud.LStatus).START}">
+                                                <span class="badge badge-pill badge-success">[[${project.lStatus.name}]]</span>
+                                            </span>
+                                            <span th:if="${project.lStatus.name == T(com.example.crud.LStatus).END}">
+                                                <span class="badge badge-pill badge-info">[[${project.lStatus.name}]]</span>
+                                            </span>
+                                            </td>
+                                        <td>
+                                            <!--<span th:switch="${project.lStatus.name}">
+                                                <span th:case=" ${T(com.example.crud.LStatus).START}">
+                                                    <span class="pointer-event"><i class="fa fa-stop text-danger"></i></span>|
+                                                </span>
+                                                <span th:case="${T(com.example.crud.LStatus).END}">
+                                                    <span class="pointer-event"><i class="fa fa-hourglass-start text-success disabled"></i></span>|
+                                                    <span class="pointer-event"><i class="fa fa-stop text-danger disabled"></i></span>|
+                                                </span>
+                                                <span th:case="*">
+                                                    <span class="pointer-event"><i class="fa fa-hourglass-start text-success"></i></span>|
+                                                    <span class="pointer-event"><i class="fa fa-stop text-danger"></i></span>|
+                                                </span>
+                                            </span>-->
+                                            <a th:href="@{'/project/'+${project.id}}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>|
+                                            <a th:href="@{'/project_members/'+${project.id}}"><i class="fa fa-users"></i></a>|
+                                            <span th:attr="data-projectid=${project.id}" style="cursor: pointer;" class="remove_project text-danger cursor-pointer"><i
+                                                    class="fa fa-x"></i></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="" th:unless="${projects.size() > 0}">
+                            <span>No projects found!</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
-</div>
-<div th:if="${projects.size() > 0}">
-    <table class="table table-sm table-hover table-responsive">
-        <thead class="thead-dark">
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Intro</th>
-                <th>Start At</th>
-                <th>End At</th>
-                <th>Status</th>
-                <th>User Id</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="project : ${projects}">
-                <th scope="row">[[${project.id}]]</th>
-                <td>[[${project.name}]]</td>
-                <td>[[${project.intro}]]</td>
-                <td>[[${project.start_at}]]</td>
-                <td>[[${project.end_at}]]</td>
-                <td>[[${project.user_id}]]</td>
-                <td>[[${project.status}]]</td>
-                <td>
-                    <a th:href="@{'/project/'+${project.id}}">
-                        <i class="fa fa-edit"></i>
-                    </a>|
-                    <a th:href="@{'/project_members/'+${project.id}}"><i class="fa fa-users"></i></a>|
-                    <span th:attr="data-projectid=${member.project_id}" class="btn btn-sm btn-warning remove_project"><i class="fa fa-x"></i></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnClear").on("click", function (e) {
+                e.preventDefault();
+                $("#keyword").text("");
+                window.location = "[[@{/projects}]]";
+            });
 
-<div class="" th:unless="${projects.size() > 0}">
-    <span>No projects found!</span>
-</div>
+            $(".remove_project").on("click", function () {
+                let projectId = $(this).data("projectid");
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#btnClear").on("click", function (e) {
-            e.preventDefault();
-            $("#keyword").text("");
-            window.location = "[[@{/projects}]]";
-        });
-
-        $(".remove_project").on("click",function(){
-            let projectId = $(this).data("projectid");
-
-            swal.fire({
-                toast:true,
-                title: "Do you want to delete the Project \<strong\>" + tutorialTitle + "\<\/strong\>?",
-                type: 'info',
-                showCancelButton: !0,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ok",
-                confirmButtonClass: "btn btn-primary",
-                cancelButtonClass: "btn btn-danger ml-1",
-                buttonsStyling: !1
-            }).then((result) => {
-                if (result.value) {
-                    window.location.href="/project/delete/"+projectId;
-                }
+                swal.fire({
+                    toast: true,
+                    title: "Do you want to delete the Project?",
+                    type: 'info',
+                    showCancelButton: !0,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ok",
+                    confirmButtonClass: "btn btn-primary",
+                    cancelButtonClass: "btn btn-danger ml-1",
+                    buttonsStyling: !1
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/project/delete/" + projectId;
+                    }
+                });
             });
         });
-    });
-</script>
-<div th:replace="fragments/footer::footer"></div>
+    </script>
+    <div th:replace="fragments/footer::footer"></div>
+</div>
 </body>
 </html>

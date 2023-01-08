@@ -13,6 +13,12 @@ public class UserDto {
     public UserDto(){
 
     }
+
+    public UserDto(Long userId, String name){
+        this.userId = userId;
+        this.name = name;
+    }
+
      public UserDto(Long userId, String name, String email) {
         this.userId = userId;
         this.name = name;

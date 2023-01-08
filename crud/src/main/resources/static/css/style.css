@@ -1,0 +1,6 @@
+.make-readonly-bg {
+    pointer-events: none;
+    touch-action: none;
+    background-color: #F2F4F4;
+    opacity: 1;
+}

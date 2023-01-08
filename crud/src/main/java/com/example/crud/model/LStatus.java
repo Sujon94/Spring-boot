@@ -1,11 +1,14 @@
 package com.example.crud.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "l_status")
 public class LStatus {
     public LStatus() {
@@ -21,4 +24,7 @@ public class LStatus {
         this.id = id;
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "lStatus")
+    private List<Project> project;
 }

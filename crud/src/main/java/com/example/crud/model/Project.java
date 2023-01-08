@@ -15,13 +15,13 @@ public class Project {
 
     }
 
-    public Project(String name, String intro, String start_at, String end_at, Long user_id, Long status, LocalDateTime created_at) {
+    public Project(String name, String intro, String start_at, String end_at, Long user_id, Long status_id, LocalDateTime created_at) {
         this.name = name;
         this.intro = intro;
         this.start_at = start_at;
         this.end_at = end_at;
         this.user_id = user_id;
-        this.status = status;
+        this.status_id = status_id;
         this.created_at = created_at;
     }
 
@@ -44,8 +44,16 @@ public class Project {
     @Column(name = "user_id")
     private Long user_id;
 
-    @Column(name = "status")
-    private Long status;
+    @Column(name = "status_id")
+    private Long status_id;
+
+    public Long getStatus_id() {
+        return status_id;
+    }
+
+    public void setStatus_id(Long status_id) {
+        this.status_id = status_id;
+    }
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime created_at;
@@ -104,14 +112,6 @@ public class Project {
         this.user_id = user_id;
     }
 
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
     public LocalDateTime getCreated_at() {
         return created_at;
     }
@@ -136,7 +136,19 @@ public class Project {
         this.deleted_at = deleted_at;
     }
 
-    /*@OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id", insertable = false, updatable = false, referencedColumnName = "id")
+    @Access(AccessType.FIELD)
+    private LStatus lStatus;
+
+    public LStatus getlStatus() {
+        return lStatus;
+    }
+
+    public void setlStatus(LStatus lStatus) {
+        this.lStatus = lStatus;
+    }
+/*@OneToOne
     @JoinColumn(name = "user_id")
     @Fetch(FetchMode.JOIN)
     private User user;

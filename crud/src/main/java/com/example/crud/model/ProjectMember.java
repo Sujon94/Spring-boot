@@ -38,8 +38,8 @@ public class ProjectMember {
     @Column(name = "user_id")
     private Long user_id;
 
-    //@ManyToOne(targetEntity = User.class,cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @OneToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class,cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    //@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",insertable=false, updatable=false)
     @Access(AccessType.FIELD)
     private User user;
@@ -51,17 +51,6 @@ public class ProjectMember {
     public void setUser(User user) {
         this.user = user;
     }
-/*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }*/
 
     public Long getUser_id() {
         return user_id;
@@ -80,21 +69,4 @@ public class ProjectMember {
     public ProjectMember() {
 
     }
-
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @Fetch(FetchMode.JOIN)
-    private User user;*/
-
-   /* @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;*/
-
-   /* public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }*/
 }
