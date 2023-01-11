@@ -7,8 +7,10 @@ public class UserDto {
     private Long userId;
     private String name;
     private String email;
+    private String password;
     private Long project_id;
     private Long projectMemberId;
+
 
     public UserDto(){
 
@@ -23,6 +25,14 @@ public class UserDto {
         this.userId = userId;
         this.name = name;
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserDto(Long userId, String name, String email, Long project_id, Long projectMemberId) {

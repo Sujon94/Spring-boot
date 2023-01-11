@@ -16,12 +16,18 @@
 <body>
 <div class="container">
 <div th:replace="fragments/header :: header"></div>
-
+    <div class="card-header">[[${pageTitle}]]</div>
+    <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
 <div class="my-3">
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                <div class="card-header">[[${pageTitle}]]</div>
                 <form th:action="@{/project/save}" method="post" enctype="multipart/form-data" th:object="${project}"
                       style="max-width: 550px; margin: 0 auto">
 

@@ -23,7 +23,7 @@ public class UserController {
         try{
             User data = userRepository
                     .save(new User(
-                            user.getName(),
+                            user.getUserName(),
                             user.getEmail(),
                             user.getPassword(),
                             user.getCreated_at()

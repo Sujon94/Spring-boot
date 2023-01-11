@@ -136,6 +136,10 @@ public class Project {
         this.deleted_at = deleted_at;
     }
 
+    @OneToMany(mappedBy = "project",cascade = CascadeType.REMOVE)
+    private List<ProjectMember> projectMembers;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id", insertable = false, updatable = false, referencedColumnName = "id")
     @Access(AccessType.FIELD)

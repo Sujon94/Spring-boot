@@ -20,7 +20,13 @@
 <div class="container">
 <div th:replace="fragments/header :: header"></div>
 <h2 class="text-center">[[${pageTitle}]]</h2>
-
+    <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
 <div class="my-3">
     <div class="card">
         <div class="row">

@@ -38,7 +38,20 @@ public class ProjectMember {
     @Column(name = "user_id")
     private Long user_id;
 
-    @ManyToOne(targetEntity = User.class,cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Project.class,cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id",insertable=false, updatable=false)
+    @Access(AccessType.FIELD)
+    private Project project;
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    @ManyToOne(targetEntity = User.class,cascade=CascadeType.REFRESH,fetch = FetchType.EAGER)
     //@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",insertable=false, updatable=false)
     @Access(AccessType.FIELD)

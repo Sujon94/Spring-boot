@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: pr_mg_sys
 -- ------------------------------------------------------
--- Server version	8.0.31-0ubuntu0.20.04.2
+-- Server version	8.0.31-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `hibernate_sequence` (
 
 LOCK TABLES `hibernate_sequence` WRITE;
 /*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
-INSERT INTO `hibernate_sequence` VALUES (24);
+INSERT INTO `hibernate_sequence` VALUES (29);
 /*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `l_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `l_status` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `l_status_id_uindex` (`id`)
@@ -70,16 +70,16 @@ DROP TABLE IF EXISTS `project_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project_members` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `project_id` int DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `project_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_members_id_uindex` (`id`),
   KEY `project_members_projects_id_fk` (`project_id`),
   KEY `project_members_users_id_fk` (`user_id`),
   CONSTRAINT `project_members_projects_id_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `project_members_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,6 @@ CREATE TABLE `project_members` (
 
 LOCK TABLES `project_members` WRITE;
 /*!40000 ALTER TABLE `project_members` DISABLE KEYS */;
-INSERT INTO `project_members` VALUES (14,8,1),(16,8,2),(18,9,1);
 /*!40000 ALTER TABLE `project_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,21 +99,22 @@ DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `projects` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `intro` varchar(200) DEFAULT NULL,
   `start_at` date DEFAULT NULL,
   `end_at` date DEFAULT NULL,
-  `user_id` int DEFAULT NULL COMMENT 'Owner',
-  `status_id` int DEFAULT '1',
+  `user_id` bigint DEFAULT NULL COMMENT 'Owner',
+  `status_id` bigint DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_id_uindex` (`id`),
   KEY `projects_users_id_fk` (`user_id`),
-  KEY `FKgxn4vwhui610av66w9fag0gpc` (`status_id`),
-  CONSTRAINT `FKgxn4vwhui610av66w9fag0gpc` FOREIGN KEY (`status_id`) REFERENCES `l_status` (`id`)
+  KEY `projects_l_status_id_fk` (`status_id`),
+  CONSTRAINT `projects_l_status_id_fk` FOREIGN KEY (`status_id`) REFERENCES `l_status` (`id`),
+  CONSTRAINT `projects_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,7 +124,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (8,'CPA Project','This is a long intro.','2023-01-19','2023-01-26',NULL,2,NULL,NULL,NULL),(9,'IDRA project','This is a long intro.','2023-01-19','2023-01-26',NULL,1,NULL,NULL,NULL),(23,'Test','Test','2023-01-11','2023-01-24',NULL,1,NULL,NULL,NULL);
+INSERT INTO `projects` VALUES (8,'CPA Project','This is a long intro.','2023-01-19','2023-01-26',NULL,2,NULL,NULL,NULL),(9,'IDRA project','This is a long intro.','2023-01-19','2023-01-26',NULL,1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,16 +161,16 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `password` text,
+  `password` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Sujon','s.c.shil94@gmail.com','123456','2023-01-05 08:00:19',NULL,NULL),(2,'Mr. X','x@gmail.com','123456','2023-01-08 03:25:05',NULL,NULL);
+INSERT INTO `users` VALUES (4,'Mr. X','x@gmail.com','123456',NULL,NULL,NULL),(5,'Sujon ','sujon@gmail.com','123456',NULL,NULL,NULL),(6,'test','test@gmail.com','123456',NULL,NULL,NULL),(9,'Sujon Chondro Shil','sujon2@gmail.com','123456',NULL,NULL,NULL),(10,'Test','test2@gmail.com','123456',NULL,NULL,NULL),(11,'Sujon Chondro Shil','test3@gmail.com','123',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -192,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-09 15:34:56
+-- Dump completed on 2023-01-12  3:30:53
